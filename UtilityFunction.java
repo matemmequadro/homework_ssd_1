@@ -11,15 +11,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 public class UtilityFunction {
 
@@ -37,7 +36,8 @@ public class UtilityFunction {
 		System.out.println("1: Invio file");
 		System.out.println("2: Invio messaggio");
 		System.out.println("3: Lettura file");
-		System.out.println("4: Exit");
+		System.out.println("4: Lettura certificato");
+		System.out.println("5: Exit");
 		System.out.println("-----------------------------");
 
 	}
@@ -258,6 +258,14 @@ public class UtilityFunction {
 	        String timeStamp = datetime.format(formatter);
 	        return timeStamp;
 	        
+	}
+	public static void sleeping(int num) throws InterruptedException {
+		
+		for (int i=0;i<num;i++) {
+			System.out.print(".");
+			TimeUnit.SECONDS.sleep(1);
+		}
+		System.out.println();
 	}
 
 }

@@ -4,11 +4,10 @@ import support.UtilityFunction;
 import crypto.CryptoFunction;
 
 import java.util.Scanner;
-
-
+import java.io.FileInputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-
+import java.security.cert.*;
 
 public class main {
 
@@ -33,6 +32,7 @@ public class main {
 					nome = scanner.next();
 					System.out.println("PW:");
 					pw = scanner.next();
+					//funzione di login
 					login = UtilityFunction.login(nome, pw);
 				}
 
@@ -52,6 +52,7 @@ public class main {
 							ricev = scanner.next();
 
 							if (!ricev.equals(nome)) {
+								//funzione di controllo utente per il ricevitore
 								controll_file = UtilityFunction.controllUtente(ricev);
 							}
 						}
@@ -63,11 +64,11 @@ public class main {
 								+ file_mex + ".txt";
 						mex = UtilityFunction.leggiFile(path_da_inviare);
 
-
+						//ottenimento delle chiavi pubblica del ricevente e privata del mandante
 						PrivateKey privateKeyMandFile=CryptoFunction.getPrivateKey(nome);
 						PublicKey  publicKeyRicevFile=CryptoFunction.getPublicKey(nome, ricev);
 
-				
+						//invio del file dopo criptazione a doppia chiave
 						if (CryptoFunction.encryptInvio(publicKeyRicevFile, privateKeyMandFile, mex, nome,
 								ricev) == true) {
 							System.out.println("L'operazione è andata a buon fine!!");
@@ -97,11 +98,11 @@ public class main {
 						System.out.println("Qual è il messaggio che vuoi mandare?");
 						messaggio = scanner.next();
 
-
+						//ottenimento delle chiavi pubblica del ricevente e privata del mandante
 						PrivateKey privateKeyMandMes=CryptoFunction.getPrivateKey(nome);
 						PublicKey  publicKeyRicevMes=CryptoFunction.getPublicKey(nome, ricev_mes);
 						
-
+						//invio del messaggio dopo criptazione a doppia chiave
 						if (CryptoFunction.encryptInvio(publicKeyRicevMes, privateKeyMandMes, messaggio, nome,
 								ricev_mes) == true) {
 							System.out.println("L'operazione è andata a buon fine!!");
@@ -122,9 +123,12 @@ public class main {
 								+ file_ricev + ".txt";
 						mandante = UtilityFunction.troncaNome(file_ricev);
 						mess_ricev = UtilityFunction.leggiFile(path_ricevere);
+
+						//ottenimento delle chiavi pubblica del ricevente e privata del mandante
 						PrivateKey privateKeyRicevente=CryptoFunction.getPrivateKey(nome);
 						PublicKey  publicKeyMandante=CryptoFunction.getPublicKey(nome, mandante);
-
+						
+						//lettura del file dopo decriptazione a doppia chiave
 						if (CryptoFunction.decryptLettura(publicKeyMandante, privateKeyRicevente, mess_ricev, nome,
 								mandante) == true) {
 							System.out.println("L'operazione è andata a buon fine!!");
@@ -135,22 +139,32 @@ public class main {
 						System.out.println("");
 						break;
 					case 4:
+						
+						CryptoFunction.letturaCertificato(nome);
+						
+						System.out.println("Ora tornerai al menu per utenti loggati");
+						System.out.println("");
+						break;
+
+					case 5:
+						UtilityFunction.sleeping(2);
 						System.out.println("MESSAGE: Addio");
-						scanner.close();
+						
+						
 						System.exit(0);
 
 					default:
 						System.out.println("ERROR: Non valido!!");
 						System.out.println("");
 					}
-				} while (scelta_sec != 4);
+				} while (scelta_sec != 5);
 
 				break;
 
 			case 2:
+				UtilityFunction.sleeping(2);
 				System.out.println("MESSAGE: Addio");
 				
-				scanner.close();
 				System.exit(0);
 
 			default:
@@ -163,3 +177,7 @@ public class main {
 	}
 
 }
+
+
+
+

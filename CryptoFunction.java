@@ -11,14 +11,11 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Scanner;
 import java.security.cert.Certificate;
 
-import java.io.FileInputStream;
-
-import java.security.KeyStore;
-
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -29,7 +26,7 @@ import support.UtilityFunction;
 public class CryptoFunction {
 	
 	
-	public static PrivateKey getPrivateKey(String utente) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+	public static PrivateKey getPrivateKey(String utente) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, InterruptedException {
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
 		char[] password = "changeit".toCharArray();
 		FileInputStream fis = new FileInputStream(
@@ -37,10 +34,11 @@ public class CryptoFunction {
 		keyStore.load(fis, password);
 
 		PrivateKey privateKey = (PrivateKey) keyStore.getKey(utente + "_kp", password);
+
 		return privateKey;
 	}
 	
-	public static PublicKey getPublicKey(String mand,String ricev) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+	public static PublicKey getPublicKey(String mand,String ricev) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, InterruptedException {
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
 		char[] password = "changeit".toCharArray();
 		FileInputStream fis = new FileInputStream(
@@ -48,6 +46,9 @@ public class CryptoFunction {
 		keyStore.load(fis, password);
 		Certificate certificate = keyStore.getCertificate(ricev + "_to_" + mand + "_keypair");
 		PublicKey publicKey = certificate.getPublicKey();
+		
+		
+
 		return publicKey;
 		
 	}
@@ -68,12 +69,21 @@ public class CryptoFunction {
 
 		encrypted = UtilityFunction.base64Encode(cipher.doFinal(cript_medio));
 		
+		System.out.println("Criptazione in corso");
+		UtilityFunction.sleeping(2);
+		
 		System.out.println("Ora il tuo messaggio è al sicuro");
+		
+		System.out.println("Invio del file in corso");
+		UtilityFunction.sleeping(2);
 
 		// creato file e inviato
 		boolean op_ok;
 		if (op_ok = UtilityFunction.createFileInvio(mandante, ricevente, encrypted) == true)
 			System.out.println("File inviato!");
+		
+		UtilityFunction.sleeping(2);
+
 
 		return op_ok;
 	}
@@ -92,11 +102,17 @@ public class CryptoFunction {
 
 		cipher.init(Cipher.DECRYPT_MODE, key_mand);
 		String decrypted = new String(cipher.doFinal(cript_medio));
+		System.out.println("Decriptazione in corso");
+		UtilityFunction.sleeping(2);
 		System.out.println("**************************");
 		System.out.println("Messaggio decripatato: ");
 		System.out.println(decrypted);
 		System.out.println("**************************");
-		System.out.println("Dopo aver letto sulla console, vedrai sul tuo desktop un file col testo decriptato");
+		System.out.println("Dopo aver letto sulla console, ");
+		System.out.println("vedrai sul tuo desktop un file col testo decriptato");
+		System.out.println("Creazione e scrittura sul file in corso");
+
+		UtilityFunction.sleeping(2);
 
 		boolean op_ok;
 		
@@ -105,5 +121,29 @@ public class CryptoFunction {
 
 
 		return op_ok;
+	}
+	
+	public static void letturaCertificato(String nome) throws CertificateException, FileNotFoundException, InterruptedException {
+
+		System.out.println("Di chi vuoi leggere il certificato? (scrivi mio se vuoi il tuo)");
+		Scanner scann = new Scanner(System.in);
+		String utente;
+		utente = scann.next();
+		if(utente.equals("mio")) {
+			utente=nome;
+		}
+		
+		CertificateFactory fac = CertificateFactory.getInstance("X509");
+		FileInputStream is = new FileInputStream("/Users/emme_quadro/Desktop/cartellaUtenti/certificati/"+utente+"_certificate.cer");
+		X509Certificate cert = (X509Certificate) fac.generateCertificate(is);
+
+		System.out.println("Lettura certificato in corso");
+		UtilityFunction.sleeping(2);
+		
+		System.out.println(cert);
+		
+		
+		
+
 	}
 }
