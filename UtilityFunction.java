@@ -87,7 +87,7 @@ public class UtilityFunction {
 		try {
 
 			File newFile = new File("/Users/emme_quadro/Desktop/cartellaUtenti/" + ricev + "/desktop/",
-					"mex_from_" + mand + "_to_" + ricev +" (decriptato).txt");
+					"mex_from_" + mand + "_to_" + ricev +UtilityFunction.timeStamp()+" (decriptato).txt");
 			if (newFile.createNewFile()) {
 
 				FileWriter myWriter = new FileWriter(newFile);
