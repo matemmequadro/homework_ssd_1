@@ -58,12 +58,12 @@ public class UtilityFunction {
 		return decodedBytes;
 	}
 	
-	public static boolean createFileInvio(String mand, String ricev, String messaggio) {
+	public static boolean createFileInvio(String mand, String ricev, String messaggio, String time) {
 		boolean ok = false;
 		try {
 
 			File newFile = new File("/Users/emme_quadro/Desktop/cartellaUtenti/" + ricev + "/ricevuto/",
-					"mex_from_" + mand + "_to_" + ricev +UtilityFunction.timeStamp()+ ".txt");
+					"mex_from_" + mand + "_to_" + ricev +time+ ".txt");
 			if (newFile.createNewFile()) {
 
 				FileWriter myWriter = new FileWriter(newFile);
@@ -259,6 +259,7 @@ public class UtilityFunction {
 	        return timeStamp;
 	        
 	}
+	
 	public static void sleeping(int num) throws InterruptedException {
 		
 		for (int i=0;i<num;i++) {

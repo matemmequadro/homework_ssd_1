@@ -4,7 +4,9 @@ import support.UtilityFunction;
 import crypto.CryptoFunction;
 
 import java.util.Scanner;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.*;
@@ -16,7 +18,8 @@ public class main {
 		int scelta_up, scelta_sec;
 		String nome = null, pw = null;
 		do {
-
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			Scanner scanner = new Scanner(System.in);
 
 			UtilityFunction.mainMenu();
@@ -96,7 +99,7 @@ public class main {
 
 						String messaggio;
 						System.out.println("Qual è il messaggio che vuoi mandare?");
-						messaggio = scanner.next();
+						messaggio = br.readLine();
 
 						//ottenimento delle chiavi pubblica del ricevente e privata del mandante
 						PrivateKey privateKeyMandMes=CryptoFunction.getPrivateKey(nome);
@@ -130,7 +133,7 @@ public class main {
 						
 						//lettura del file dopo decriptazione a doppia chiave
 						if (CryptoFunction.decryptLettura(publicKeyMandante, privateKeyRicevente, mess_ricev, nome,
-								mandante) == true) {
+								mandante,path_ricevere) == true) {
 							System.out.println("L'operazione è andata a buon fine!!");
 
 						}
