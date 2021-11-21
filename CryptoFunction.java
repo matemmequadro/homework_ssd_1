@@ -116,7 +116,7 @@ public class CryptoFunction {
 
 		
 		
-		 /* System.out.println("Verifica firma in corso");
+		/*  System.out.println("Verifica firma in corso");
 			UtilityFunction.sleeping(2);
 		  if (verificaFirma(key_mand, path, decrypted, ricevente) == true) {
 			System.out.println("ok");
@@ -181,6 +181,8 @@ public class CryptoFunction {
 		byte[] digitalSignature = signature.sign();
 
 		Files.write(Paths.get(file),digitalSignature);
+		
+		
 		ok=true;
 		return ok;
 
@@ -196,6 +198,7 @@ public class CryptoFunction {
 		
 		path_firma=path_firma.replaceAll(".txt", "");
 		
+		
 
 		
 		Signature signature = Signature.getInstance("SHA256withRSA");
@@ -205,8 +208,11 @@ public class CryptoFunction {
 		byte[] messageBytes = Files.readAllBytes(Paths.get(path_firma));
 		
 		signature.update(mes.getBytes());
+		
+
+		
 		boolean ok;
-		ok = signature.verify(messageBytes);
+		ok=signature.verify(messageBytes);
 
 		return ok;
 	}
